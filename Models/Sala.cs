@@ -15,7 +15,7 @@ namespace WMVCBCCT12023.Models
         public int id { get; set; }
 
         [Required(ErrorMessage = "Campo descrição não pode ser nulo")]
-        [StringLength(40)]
+        [StringLength(30, ErrorMessage ="Tamanho até 40 caracteres")]
         [Display(Description = "descrição", Name = "Descrição: ")]
         public string  descricao { get; set; }
 

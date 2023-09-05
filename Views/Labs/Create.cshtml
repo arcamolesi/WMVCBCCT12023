@@ -1,0 +1,47 @@
+﻿@model WMVCBCCT12023.Models.Sala
+
+@{
+    ViewData["Title"] = "Adicionar Sala";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Adicionar Nova Sala</h1>
+
+<h4>Sala</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="descricao" class="control-label"></label>
+                <input asp-for="descricao" class="form-control" />
+                <span asp-validation-for="descricao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="quantidade" class="control-label"></label>
+                <input asp-for="quantidade" class="form-control" />
+                <span asp-validation-for="quantidade" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="situacao" class="control-label"></label>
+                <select asp-for="situacao" asp-items="ViewBag.bagSituacao" class="form-control">
+                    <option selected="selected" value="">Selecione um Elemento</option>
+                </select>
+               
+                <span asp-validation-for="situacao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Página Principal de labs</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
