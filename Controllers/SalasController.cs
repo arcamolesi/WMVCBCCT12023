@@ -21,7 +21,7 @@ namespace WMVCBCCT12023.Controllers
         // GET: Salas
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Salas.ToListAsync());
+            return View(await _context.Salas.ToListAsync());
         }
 
         // GET: Salas/Details/5
@@ -45,6 +45,14 @@ namespace WMVCBCCT12023.Controllers
         // GET: Salas/Create
         public IActionResult Create()
         {
+            var status = Enum.GetValues(typeof(Situacao))
+                             .Cast<Situacao>()
+                             .Select(e => new SelectListItem
+                             {
+                                 Value = e.ToString(),
+                                 Text = e.ToString()
+                             });
+            ViewBag.Status = status;
             return View();
         }
 
@@ -61,6 +69,14 @@ namespace WMVCBCCT12023.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            var status = Enum.GetValues(typeof(Situacao))
+                 .Cast<Situacao>()
+                 .Select(e => new SelectListItem
+                 {
+                     Value = e.ToString(),
+                     Text = e.ToString()
+                 });
+            ViewBag.Status = status;
             return View(sala);
         }
 
@@ -77,6 +93,14 @@ namespace WMVCBCCT12023.Controllers
             {
                 return NotFound();
             }
+            var status = Enum.GetValues(typeof(Situacao))
+                 .Cast<Situacao>()
+                 .Select(e => new SelectListItem
+                 {
+                     Value = e.ToString(),
+                     Text = e.ToString()
+                 });
+            ViewBag.Status = status;
             return View(sala);
         }
 
@@ -147,14 +171,14 @@ namespace WMVCBCCT12023.Controllers
             {
                 _context.Salas.Remove(sala);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool SalaExists(int id)
         {
-          return _context.Salas.Any(e => e.id == id);
+            return _context.Salas.Any(e => e.id == id);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace WMVCBCCT12023.Controllers
                 Text = e.ToString()
             });
 
-            ViewBag.bagSituacao = status;
+            ViewBag.sit = status;
             return View();
         }
 
@@ -52,6 +52,128 @@ namespace WMVCBCCT12023.Controllers
         }
 
 
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null || _context.Salas == null)
+            {
+                return NotFound();
+            }
 
+            var sala = await _context.Salas
+                .FirstOrDefaultAsync(m => m.id == id);
+            if (sala == null)
+            {
+                return NotFound();
+            }
+
+            return View(sala);
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _context.Salas == null)
+            {
+                return NotFound();
+            }
+
+            var sala = await _context.Salas.FindAsync(id);
+            if (sala == null)
+            {
+                return NotFound();
+            }
+            
+            var status = Enum.GetValues(typeof(Situacao))
+           .Cast<Situacao>()
+           .Select(e => new SelectListItem
+           {
+               Value = e.ToString(),
+               Text = e.ToString()
+           });
+            ViewBag.situacao = status; 
+
+            return View(sala);
+        }
+
+
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("id,descricao,quantidade,situacao")] Sala sala)
+        {
+            if (id != sala.id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(sala);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!SalaExists(sala.id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(sala);
+        }
+
+
+
+
+        // [HttpGet]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || _context.Salas == null)
+            {
+                return NotFound();
+            }
+
+            var sala = await _context.Salas
+                .FirstOrDefaultAsync(m => m.id == id);
+            if (sala == null)
+            {
+                return NotFound();
+            }
+
+            return View(sala);
+        }
+
+
+        // POST: Salas/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (_context.Salas == null)
+            {
+                return Problem("Conjunto 'Contexto.Salas'  está vazio.");
+            }
+            var sala = await _context.Salas.FindAsync(id);
+            if (sala != null)
+            {
+                _context.Salas.Remove(sala);
+            }
+            
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        private bool SalaExists(int id)
+        {
+            return _context.Salas.Any(e => e.id == id);
+        }
     }
 }

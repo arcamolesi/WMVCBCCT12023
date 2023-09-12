@@ -47,6 +47,15 @@ namespace WMVCBCCT12023.Controllers
         // GET: Alunos/Create
         public IActionResult Create()
         {
+            var periodo = Enum.GetValues(typeof(Periodo))
+            .Cast<Periodo>()
+            .Select(e => new SelectListItem
+            {
+                Value = e.ToString(),
+                Text = e.ToString()
+            });
+            ViewBag.periodo = periodo;
+
             ViewData["cursoID"] = new SelectList(_context.Cursos, "id", "descricao");
             return View();
         }
@@ -58,6 +67,8 @@ namespace WMVCBCCT12023.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,nome,aniversario,email,cursoID,periodo")] Aluno aluno)
         {
+
+            aluno.periodo = (int)aluno.periodo;
             if (ModelState.IsValid)
             {
                 _context.Add(aluno);
